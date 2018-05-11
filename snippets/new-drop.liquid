@@ -1,0 +1,30 @@
+<div class="site-nav__dropdown site-nav__dropdown--centered mor-pad" id="SiteNavLabel-shop-2" aria-expanded="false">
+  <div class="my-cont">
+  <div class="seven-my">
+    <div class="half-my">
+      <a href="/pages/our-cause">
+      <img src="{{ 'new-img.png' | asset_img_url: 'original'}}" class="sm-img-my"/>
+      </a>
+    </div>
+    <div class="half-my">
+      {% if linklists.com-first-menu.links != blank %}
+      <ul class="nrml">
+      {% for link in linklists.com-first-menu.links %}
+        <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+      {% endfor %}
+      </ul>
+      {% endif %}
+      {% if linklists.com-first-menu.links != blank %}
+      <ul class="bold-my">
+      {% for link in linklists.com-second-menu.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+  </div>
+  <div class="three-my">
+    <a class="hashtag" href="https://www.instagram.com/namastetics/" target="_blank">#namastetrue</a>
+  </div>
+  </div>
+</div>
