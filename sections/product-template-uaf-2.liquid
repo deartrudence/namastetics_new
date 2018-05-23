@@ -444,11 +444,11 @@
               {% endfor %}
             </select>
             
-            {% include 'swatch-uaf' %}
             {% if product.available and product.variants.size > 1 %}
-              {% for option in product.options %}
-                {% include 'swatch' with option %}
-              {% endfor %}
+            {% for option in product.options %}
+            {% include 'swatch' with option %}
+            {% include 'swatch-uaf' with option %}
+            {% endfor %}
             {% endif %}
             
 
@@ -552,7 +552,6 @@
          <span class="spr-summary-actions-togglereviews">
            {{ product.reviews_count }}
           </span>  Customer reviews</h2>
-        <div>
         {{ product.metafields.spr.reviews }}
         </div>
   </div>
@@ -825,7 +824,6 @@ window.onclick = function(event) {
 			}, 500, 'swing', function () {
 				window.location.hash = target;
 				$(document).on("scroll", onScroll);
-        console.log("trudy SCROLL ")
 			});
 		});
 	});
@@ -833,7 +831,6 @@ window.onclick = function(event) {
 	function onScroll(event){
 		var scrollPosition = $(document).scrollTop();
 		$('.main_image_prodct a').each(function () {
-        console.log("trudy SCROLL 2")
 			var currentLink = $(this);
 			var refElement = $(currentLink.attr("href"));
 			if (refElement.position().top <= scrollPosition && refElement.position().top + refElement.height() > scrollPosition) {

@@ -135,6 +135,7 @@ ShopifyAPI.onError = function(XMLHttpRequest, textStatus) {
     - Allow custom error callback
 ==============================================================================*/
 ShopifyAPI.addItemFromForm = function(form, callback, errorCallback) {
+  console.log('uaf', form)
   var $body = $(document.body),
   params = {
     type: 'POST',
@@ -301,6 +302,7 @@ var ajaxCart = (function(module, $) {
   formOverride = function () {
     $formContainer.on('submit', function(evt) {
       evt.preventDefault();
+      console.log('uaf - submitting product')
 
       // Add class to be styled if desired
       $addToCart.removeClass('is-added').addClass('is-adding');

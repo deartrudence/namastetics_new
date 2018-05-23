@@ -49,117 +49,111 @@
 {% else %}
 <div class="swatch {{swatch |downcase}}-option clearfix" data-option-index="{{ option_index }}">
   {% if is_color %}
-  <div class="color_option_checked clr_ttl"></div>
+    <div class="color_option_checked clr_ttl"></div>
   {% else %}
-  <div class="header sw_ttl">{{ swatch }} </div>
+    <div class="header sw_ttl">{{ swatch }} </div>
   {% endif %}
   {% assign values = '' %}
-  {% for variant in product.variants %}
-    {% assign value = variant.options[option_index] %}
-    {% unless values contains value %}
-      {% assign values = values | join: ',' %}
-      {% assign values = values | append: ',' | append: value %} 
-      {% assign values = values | split: ',' %}
-      <div data-value="{{ value | escape }}" class="swatch-element {% if is_color %}color {% endif %}{{ value | handle }} {% if variant.available %}available{% else %}soldout{% endif %}">
-        {% if is_color %}
-<!--         <div class="tooltip">{{ value }}</div> -->
-        {% endif %}
-        <input id="swatch-{{ option_index }}-{{ value | handle }}" type="radio" name="option-{{ option_index }}" value="{{ value | escape }}"{% if forloop.first %} checked{% endif %} {% unless variant.available %}disabled{% endunless %} />
-        {% if is_color %}
-        <label for="swatch-{{ option_index }}-{{ value | handle }}" style="background-color: {{ value | split: ' ' | last | handle }}; background-image: url({{ value | handle | append: '.' | append: file_extension | asset_url }})">
-          <img class="crossed-out" src="{{ 'soldout.png' | asset_url }}" />
-        </label>
-        {% else %}
-        <label for="swatch-{{ option_index }}-{{ value | handle }}">
-          {{ value }}
-          <img class="crossed-out" src="{{ 'soldout.png' | asset_url }}" />
-        </label>
-        {% endif %}
-      </div>
-    {% endunless %}
-    {% if variant.available %}
-    <script>
-      jQuery('.swatch[data-option-index="{{ option_index }}"] .{{ value | handle }}').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
-    </script>
-      <script>
-if ($(window).width() > 767) {        
-  $(".swatch .color input#swatch-{{ option_index }}-{{ value | handle }}").change(function(e){
-     $("#loading-image").css('display', 'block');
-     $('.pro-image div').hide();
-    var getcolor = '{{ value }}';
-     var getts = '{{ variant.url }}';
-      $.ajax({
-      type: 'GET',
-      url: ""+getts+"",
-      dataType: "HTML",
-      success: function(matt)
-    {
-      
-     var change =  $(matt).find('.pro-image').html();
-      $('.pro-image').html('');
-      $(".pro-image").append(change);
-      
-       $("#loading-image").css('display', 'none');
-       $('.pro-image div').show(); 
-	 
- $('#cssmenu > ul > li:has(ul)').addClass("has-sub");
 
-  $('#cssmenu > ul > li > a').click(function() {
-    var checkElement = $(this).next();
-    
-    $('#cssmenu li').removeClass('active');
-    $(this).closest('li').addClass('active');	
-    
-    
-    if((checkElement.is('ul')) && (checkElement.is(':visible'))) {
-      $(this).closest('li').removeClass('active');
-      checkElement.slideUp('normal');
-    }
-    
-    if((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
-      $('#cssmenu ul ul:visible').slideUp('normal');
-      checkElement.slideDown('normal');
-    }
-    
-    if (checkElement.is('ul')) {
-      return false;
-    } else {
-      return true;	
-    }		
-  });
-   $('.product-photo-slider').slick({
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  arrows: false,
-  fade: true,
-  asNavFor: '.multiple--image'
-});
-$('.multiple--image').slick({
-  slidesToShow: 4,
-  slidesToScroll: 1,
-  asNavFor: '.product-photo-slider',
-  dots: true,
-  centerMode: true,
-  focusOnSelect: true
-});
-      $('#thumbnails a').click(function() {
-  var newImage = $(this).attr('href');
-  $( 'div#main-product-image img' ).attr({ src: newImage }); 
-  return false;
-  });
-      
-    }
-    });
-    });
-      
- 
-    
-        }
+  <div class="swatch-size-container">
+    <ul>
+      {% for variant in product.variants %}
+        {% assign value = variant.options[option_index] %}
+        {% unless values contains value %}
+          {% assign values = values | join: ',' %}
+          {% assign values = values | append: ',' | append: value %} 
+          {% assign values = values | split: ',' %}
+          <div data-value="{{ value | escape }}" class="swatch-element {% if is_color %}color {% endif %}{{ value | handle }} {% if variant.available %}available{% else %}soldout{% endif %}">
+            <input id="swatch-{{ option_index }}-{{ value | handle }}" data-single-option-selector type="radio" name="id" value="{{ variant.id}}"{% if product.first_available_variant.id == variant.id %} checked{% endif %} {% unless variant.available %}disabled{% endunless %} />
+            <label for="swatch-{{ option_index }}-{{ value | handle }}">
+              {{ value }}
+              <img class="crossed-out" src="{{ 'soldout.png' | asset_url }}" />
+            </label>
+          </div>
+        {% endunless %}
+        {% if variant.available %}
+          <script>
+            jQuery('.swatch[data-option-index="{{ option_index }}"] .{{ value | handle }}').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
+          </script>
+          <script>
+            if ($(window).width() > 767) {        
+             $(".swatch .color input#swatch-{{ option_index }}-{{ value | handle }}").change(function(e){
+                $("#loading-image").css('display', 'block');
+                $('.pro-image div').hide();
+               var getcolor = '{{ value }}';
+                var getts = '{{ variant.url }}';
+                $.ajax({
+                 type: 'GET',
+                 url: ""+getts+"",
+                 dataType: "HTML",
+                 success: function(matt)
+               {
+                  
+                var change =  $(matt).find('.pro-image').html();
+                 $('.pro-image').html('');
+                 $(".pro-image").append(change);
+                  
+                  $("#loading-image").css('display', 'none');
+                  $('.pro-image div').show(); 
+              
+            $('#cssmenu > ul > li:has(ul)').addClass("has-sub");
 
-  </script>  	
+             $('#cssmenu > ul > li > a').click(function() {
+               var checkElement = $(this).next();
+                
+                $('#cssmenu li').removeClass('active');
+                $(this).closest('li').addClass('active');	
+                
+                
+               if((checkElement.is('ul')) && (checkElement.is(':visible'))) {
+                 $(this).closest('li').removeClass('active');
+                  checkElement.slideUp('normal');
+                }
+                
+               if((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
+                 $('#cssmenu ul ul:visible').slideUp('normal');
+                 checkElement.slideDown('normal');
+               }
+                
+               if (checkElement.is('ul')) {
+                 return false;
+               } else {
+                 return true;	
+               }		
+             });
+            
+                  
+               }
+               });
+               });
+              $('.product-photo-slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: false,
+                fade: true,
+                asNavFor: '.multiple--image'
+              });
+              $('.multiple--image').slick({
+                slidesToShow: 4,
+                slidesToScroll: 1,
+                asNavFor: '.product-photo-slider',
+                dots: true,
+                centerMode: true,
+                focusOnSelect: true
+              });
+              $('#thumbnails a').click(function () {
+                var newImage = $(this).attr('href');
+                $('div#main-product-image img').attr({ src: newImage });
+                return false;
+              });  
+            }
+
+      </script>  	
  
     {% endif %}
   {% endfor %}
+  </ul>
+  </div>
 </div>
 {% if swatch == 'Size'%}
 <div class="size-guid-popup">
@@ -186,8 +180,9 @@ $('.multiple--image').slick({
   $( ".color_option_checked" ).html( $( ".color-option input:checked" ).val());
   $( ".color-option label" ).each(function() {
     $(this).hover(function() {
-    $( ".color_option_checked" ).html( $(this).parent('.swatch-element').find('input').val());
-  });
+      $( ".color_option_checked" ).html( $(this).parent('.swatch-element').find('input').val());
+      console.log('uaf', $(this).parent('.swatch-element').find('input').val())
+    });
   });
 </script>
 {% endif %}
@@ -240,6 +235,7 @@ $('.multiple--image').slick({
 </div>
 {% endcomment %}
 {% else %}
+<p>IS COLOR{{is_color}}</p>
 <div class="swatch {{swatch |downcase}}-option clearfix" data-option-index="{{ option_index }}">
   {% if is_color %}
   <div class="color_option_checked clr_ttl"></div>

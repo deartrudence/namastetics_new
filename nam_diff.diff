@@ -1,0 +1,139 @@
+assets/custom.css
+assets/custom.scss
+assets/custom.scss.liquid
+assets/gift-card.scss
+assets/theme.js
+assets/theme.scss.liquid
+config/settings_data.json
+config.yml
+layout/theme.liquid
+	 <!-- BeginConsistentCartAddon --><script>{% if customer %}Shopify.merge_cart_text = '{{ "consistent_cart_addon.merge_cart_text" | t }}' ;Shopify.customer_logged_in = true ;Shopify.customer_email = "{{ customer.email }}" ;Shopify.log_uuids = true;{% else %}Shopify.customer_logged_in = false ;Shopify.customer_email = "" ;Shopify.log_uuids = true;{% endif %}</script><!-- EndConsistentCartAddon -->
+ </head>
+ 
+@@ -342,12 +340,6 @@
+         var img_height = $( window ).height()-15;
+         $('body .feature_image img').css('height', img_height);
+       });
+-      $(document).ready(function(){
+-      $('.my-cont a').click(function(){
+-        window.open(this.href,'_self');
+-        return false;
+-      });
+-      });
+ </script>
+ 
+ </html>
+
+
+sections/collection-template.liquid
+	.grid-view-item__title
+   {
+     font-size: 17px;
+-    color: #000;    
++    color: #4a4a4a;
++    font-family: Lato;
+   }
+   .product-price__price
+   {
+     font-size: 14px;
+-    color: #4a4a4a;    
++    color: #4a4a4a;
++    font-family: Lato;
+   }
+   .collection-description
+   {
+sections/footer.liquid
+	 <div class="grid__item{% if section.settings.footer_newsletter_enable and section.settings.footer_linklist_two != blank %} medium-up--one-third{% elsif section.settings.footer_linklist_two == blank and section.settings.footer_newsletter_enable %} medium-up--one-half{% else %} text-center{% endif %}">
+         {%- assign footer_linklist = section.settings.footer_linklist -%}
+         {% if linklists[footer_linklist].links.size > 0 %}
+-        <p class="footr_title small--one-whole border-bottom border-top-my">{{linklists[footer_linklist].title }}
++        <p class="footr_title small--one-whole border-bottom border-top">{{linklists[footer_linklist].title }}
+           <span class="medium-up--hide icon_down-arrow">
+             {% include 'icon-chevron-down' %}
+           </span>
+sections/product-template.liquid
+	       {%- assign enable_zoom = false -%}
+   {% endcase %}
+ 
+-  <div class="grid product-single">
++  <div class="grid product-single" data-handle="{{ product.handle }}">
+     <div class="grid__item product-single__photos {{ product_image_width }}{% if section.settings.image_size == 'full' %} product-single__photos--full{% endif %}">
+       <div class="over_flow_hidden">
+       {%- assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image -%}
+@@ -459,6 +459,10 @@
+             {% endif %}
+ 
+             <div class="product-form__item product-form__item--submit">
++              <h2>THIS IS THE VAR {{ product.handle }}</h2>
++
++              <h2>THIS IS THE VAR {{ current_variant.title }}</h2>
++              <h2>THIS IS THE VAR {{ current_variant.available }}</h2>
+               <button type="submit" name="add" id="AddToCart-{{ section.id }}" {% unless current_variant.available %}disabled="disabled"{% endunless %} class="btn product-form__cart-submit{% if product.options.size == 1 and product.variants[0].title == 'Default Title' %} product-form__cart-submit--small{% endif %}">
+                 <span id="AddToCartText-{{ section.id }}">
+                   {% unless current_variant.available %}
+@@ -544,13 +548,13 @@
+         <h2 class="title-my" style="text-transform: capitalize;">
+          <span class="spr-summary-actions-togglereviews">
+            {{ product.reviews_count }}
+-          </span>  Customer reviews</h2>
++          </span>  Customer Reviews</h2>
+        
+       <div class="customer-review" id="shopify-product-reviews" data-id="{{product.id}}">        
+         <h2 class="spr-header-title hide" style="text-transform: capitalize;">
+          <span class="spr-summary-actions-togglereviews">
+            {{ product.reviews_count }}
+-          </span>  Customer reviews</h2>
++          </span>  Customer Reviews</h2>
+         <
+         {{ product.metafields.spr.reviews }}
+         </div>
+@@ -768,7 +772,20 @@
+                        
+                        g.preventDefault();
+                } );
+-       })(jQuery);
++  })(jQuery);
++  var url_string = window.location.href
++  var url = new URL(url_string);
++  var c = url.searchParams.get("variant");
++  var handle = $('.product-single').data('handle')
++  console.log('UA5 --> does this show up', handle)
++    $.ajax({
++        type: 'GET',
++        url: "/products/" + handle,
++        dataType: "json",
++        success: function (response) {
++          console.log('ajax call', response)
++        }
++        })
+ 
+ });
+   // Get the modal
+@@ -1033,7 +1050,8 @@ $(document).ready(function(){
+   #ProductPhotoImg {
+        width: 100%;
+ }
+-  h2.title-my {    
++  h2.title-my {
++    font-size: 2.1875em;
+     text-align: center;
+ }
+   .main_baner_pro {
+@@ -1067,10 +1085,6 @@ $(document).ready(function(){
+     h2.title-my {
+     font-size: 1.2875em;
+     text-align: center;
+-      margin-bottom: 0px;
+-}
+-    #shopify-product-reviews {
+-    margin: 0;
+ }
+     #mobile-gallery {
+       display: block;
+snippets/ajax-cart-template.liquid
+snippets/collection-grid.liquid
+snippets/product-card-grid.liquid
+snippets/site-nav.liquid
+snippets/swatch.liquid
+snippets/swymSnippet.liquid
+templates/product.liquid

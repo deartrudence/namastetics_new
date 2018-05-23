@@ -1,0 +1,31 @@
+{% assign file_extension = 'png' %}
+{% assign collection = product.title | downcase | handleize %}
+
+{% assign current_option = option | downcase %}
+
+<span class="variant-title color">
+  {% for field in product.metafields['color'] %}
+    {% assign current_color = field | first %}
+    {{ current_color | capitalize}}
+  {% endfor %}
+</span>
+<div class="swatch-color-container">
+  {% for product in collections[collection].all_products%}
+      {% for field in product.metafields['color']%}
+        {%  assign value = field | first %}
+        {% assign color_code = product.metafields.color[value] %}
+        <a href="{{product.url}}" style="background-image: url({{ value | handle | append: '.' | append: file_extension | asset_url }}); background-color: {{color_code}}" data-color="{{value | capitalize}}"class="swatch-color {% if value == current_color %}selected {% endif %}">  
+          {% unless product.available %}
+          <img class="crossed-out" src="{{ 'soldout.png' | asset_url }}" />
+          {% endunless %}
+        </a>
+      {% endfor %}
+  {% endfor %}
+</div>
+<script>
+  $('.swatch-color').on('mouseenter',function(){
+    var color = $(this).data('color')
+    $('.variant-title').text(color)
+  })
+</script>
+

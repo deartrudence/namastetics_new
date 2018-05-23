@@ -1,0 +1,12 @@
+assets/custom.css
+assets/custom.scss
+assets/custom.scss.liquid
+assets/gift-card.scss
+assets/theme.js
+assets/theme.scss.liquid
+config/settings_data.json
+config.yml
+layout/theme.liquid
+sections/collection-template.liquid
+sections/footer.liquid
+sections/product-template.liquid

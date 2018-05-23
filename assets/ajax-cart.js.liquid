@@ -135,6 +135,7 @@ ShopifyAPI.onError = function(XMLHttpRequest, textStatus) {
     - Allow custom error callback
 ==============================================================================*/
 ShopifyAPI.addItemFromForm = function(form, callback, errorCallback) {
+  console.log('uaf-liquid', form)
   var $body = $(document.body),
   params = {
     type: 'POST',

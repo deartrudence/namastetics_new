@@ -43,6 +43,12 @@ function attributeToString(attribute) {
   return jQuery.trim(attribute);
 }
 
+/*=====================================
+	UA5 - Javascript
+
+=====================================*/
+
+
 /*============================================================================
   API Functions
   - Shopify.format money is defined in option_selection.js.
@@ -142,6 +148,7 @@ Shopify.onError = function(XMLHttpRequest, textStatus) {
   POST to cart/add.js returns the JSON of the line item associated with the added item
 ==============================================================================*/
 Shopify.addItem = function(variant_id, quantity, callback) {
+  console.log('uaf-theme', variant_id)
   var quantity = quantity || 1;
   var params = {
     type: 'POST',
@@ -169,6 +176,8 @@ Shopify.addItem = function(variant_id, quantity, callback) {
     - Allow custom error callback
 ==============================================================================*/
 Shopify.addItemFromForm = function(form, callback, errorCallback) {
+  console.log('uaf-theme2', form)
+  console.log('uaf', jQuery(form).serialize())
   $('#AddToCartText-product-template').html('Adding...');
   var params = {
     type: 'POST',
@@ -176,11 +185,11 @@ Shopify.addItemFromForm = function(form, callback, errorCallback) {
     data: jQuery(form).serialize(),
     dataType: 'json',
     success: function(line_item) {
-      
       $('#AddToCartText-product-template').html('Added');
       $('#ajaxifyDrawer').addClass('is-visible');
       if ((typeof callback) === 'function') {
         callback(line_item, form);
+        console.log('UAF UH HUH UH HUH', line_item)
       }
       else {
         Shopify.onItemAdded(line_item, form);
@@ -1226,7 +1235,7 @@ $(document).bind('click touchstart', function(e) {
     var $clicked = $(e.target);
     if (!$clicked.parents().hasClass("site-header") && !$clicked.parents().hasClass("drawer_crt")){
       //alert('hello');
-      $('#AddToCartText-product-template').html('Add To Cart');
+      // $('#AddToCartText-product-template').html('Add To Cart');
       $('#ajaxifyDrawer').removeClass('is-visible');
       $('body').removeClass('add_crt');
   
